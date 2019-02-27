@@ -1,14 +1,32 @@
 <template>
-  <div class="scroll-div" @touchend="end" @touchmove="move">
-    <div class="for-class" v-for="(item, index) in this.baseDataArray" :key="index">
+  <div
+    class="scroll-div"
+    ref="scrollDiv"
+  >
+    <div
+      @touchend="end"
+      @touchmove="move"
+    >
       <div
-        class="info-line"
-        :id="item.idName"
-        :class="{'fixed-line': fixedItem === item.fixedItem}"
-      >{{item.name}}</div>
-      <div style="width: 100%;height: 45px" v-for="(o, index) in item.list" :key="index">{{o}}</div>
+        class="for-class"
+        v-for="(item, index) in this.baseDataArray"
+        :key="index"
+        :id="item.idName + '__for-class'"
+      >
+        <div
+          class="info-line"
+          :id="item.idName"
+          :class="{'fixed-line': fixedItem === item.fixedItem}"
+        >{{item.name}}</div>
+        <div
+          style="width: 100%;height: 45px"
+          v-for="(o, index) in item.list"
+          :key="index"
+        >{{o}}</div>
+      </div>
     </div>
   </div>
+
 </template>
 
 <script>
@@ -21,7 +39,10 @@ export default {
       fixedItem: 0,
       scrollY: 0,
       timer: null,
-      fromTop: 0
+      fromTop: 0,
+      scrollDivOffsetTop: 0,
+      winWidth: 0,
+      winHeight: 0,
     };
   },
   mounted() {
@@ -40,30 +61,40 @@ export default {
       };
     }
     this.$nextTick(() => {
+      this.changeDomStyle();
       for (let item of this.baseDataArray) {
-        item.top = document.getElementById(item.idName).offsetTop;
+        item.top = document.getElementById(item.idName).offsetTop
       }
       this.startScroll();
     });
-    if(!('ontouchmove' in window)) {
-        window.addEventListener("scroll", this.startScroll);
+    if (!('ontouchmove' in window)) {
+      window.addEventListener("scroll", this.startScroll, true)
     }
-    
+
   },
   methods: {
-    move() {
+    changeDomStyle: function () {
+      this.scrollDivOffsetTop = this.$refs.scrollDiv.offsetTop
+      this.winWidth = window.innerWidth;
+      this.winHeight = window.innerHeight;
+      this.$refs.scrollDiv.style.height = this.winHeight - this.scrollDivOffsetTop + 'px';
+      this.$refs.scrollDiv.style.maxHeight = this.winHeight - this.scrollDivOffsetTop + 'px';
+    },
+    move: function () {
       this.startScroll();
     },
-    end() {
+    end: function () {
       this.TimeDelay();
     },
-    TimeDelay() {
+    TimeDelay: function () {
       if (this.timer) clearTimeout(this.timer);
       this.timer = setTimeout(() => {
-        this.scrollY =
-          document.documentElement.scrollTop ||
-          window.pageYOffset ||
-          document.body.scrollTop;
+        // this.scrollY =
+        //   document.documentElement.scrollTop ||
+        //   window.pageYOffset ||
+        //   document.body.scrollTop;
+        this.scrollY = this.$refs.scrollDiv.scrollTop;
+        console.log(this.scrollY)
         if (this.scrollY === this.fromTop) {
           clearTimeout(this.timer);
           return;
@@ -71,10 +102,12 @@ export default {
         this.fromTop = this.scrollY;
         this.msg = this.scrollY;
         for (let item of this.baseDataArray) {
-          if (this.scrollY > item.top - 20) {
+          if (this.scrollY > item.top - 120) {
             this.fixedItem = item.fixedItem;
+            document.getElementById(`${item.idName}`).style.top = this.scrollDivOffsetTop- 50 + 'px';
           }
         }
+
         this.TimeDelay();
       }, 100);
     },
@@ -95,21 +128,24 @@ export default {
       }
       return arrayChunk;
     },
-    startScroll: function() {
-      this.scrollY =
-        document.documentElement.scrollTop ||
-        window.pageYOffset ||
-        document.body.scrollTop;
+    startScroll: function () {
+      // this.scrollY =
+      //   document.documentElement.scrollTop ||
+      //   window.pageYOffset ||
+      //   document.body.scrollTop;
+      this.scrollY = this.$refs.scrollDiv.scrollTop;
+      console.log(this.scrollY)
       for (let item of this.baseDataArray) {
-        if (this.scrollY > item.top - 20) {
+        if (this.scrollY > item.top - 120) {
           this.fixedItem = item.fixedItem;
+          document.getElementById(`${item.idName}`).style.top = this.scrollDivOffsetTop- 50 + 'px';
         }
       }
     }
   },
   destroyed() {
-    if(!('ontouchmove' in window)) {
-        window.removeEventListener("scroll", this.startScroll);
+    if (!('ontouchmove' in window)) {
+      window.removeEventListener("scroll", this.startScroll, true);
     }
   }
 };
@@ -117,10 +153,10 @@ export default {
 
 <style scoped>
 .scroll-div {
-  /* width: 100%; */
-  overflow: auto;
-  padding-top: 50px;
-  padding-bottom: 180px;
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
+  margin-top:150px;
+
 }
 .for-class {
   width: 100%;
@@ -137,6 +173,6 @@ export default {
   position: fixed;
   width: 100%;
   top: 0px;
-  z-index: 500;
+  z-index: 999;
 }
 </style>

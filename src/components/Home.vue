@@ -1,22 +1,17 @@
 <template>
-  <div class="hello">
-    <my-menu :menuData="menuItem" @item-click="itemClick" position="right-bottom"></my-menu>
-    <city-scroll></city-scroll>
+  <div class="select-location-main">
+    <span @click="routerJump(routerUrl.location)">地区选择组件</span>
   </div>
 </template>
 
 <script>
-import myMenu from "./menu/myMenu";
-import cityScroll from "./cityscroll/cityScroll";
 export default {
-  name: "HelloWorld",
-  components: {
-    myMenu: myMenu,
-    cityScroll: cityScroll
-  },
+  name: "Home",
   data() {
     return {
-      msg: "Welcome to Your Vue.js App",
+      routerUrl: {
+        location: '/location-select'
+      },
       menuItem: [
         {
           name: "item1",
@@ -44,6 +39,10 @@ export default {
   methods: {
     itemClick: function(item, index) {
       console.log(item.name);
+    },
+    routerJump: function (pathName) {
+      console.log(pathName)
+      this.$router.push({path: pathName})
     }
   }
 };
@@ -51,4 +50,23 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.select-location-main {
+  height: 100%;
+  padding: 50px 15px;
+  text-align: center;
+}
+.select-location-main > span {
+  display: block;
+  height: 50px;
+  line-height: 50px;
+  font-size: 1.25rem;
+  background: #2ecc71;
+  color:#ecf0f1;
+  box-shadow: #30336b 2px 2px 2px;
+}
+
+.select-location-main > span:active {
+  background: #27ae60;
+  box-shadow: #30336b 0.5px 0.5px 0.5px;
+}
 </style>

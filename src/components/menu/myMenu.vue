@@ -165,6 +165,7 @@ export default {
   box-shadow: aliceblue 1px 1px 1px;
   background-position: center center;
   vertical-align: middle;
+  z-index: 10000;
   /* opacity: 0.7; */
 }
 .other-content {
@@ -193,5 +194,6 @@ img:active {
   border-radius: 50%;
   padding:3px;
   box-sizing: border-box;
+  z-index: 9999;
 }
 </style>
