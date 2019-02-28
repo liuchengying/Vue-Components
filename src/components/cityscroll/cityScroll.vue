@@ -1,9 +1,7 @@
 <template>
-  <div
+    <div
     class="scroll-div"
     ref="scrollDiv"
-  >
-    <div
       @touchend="end"
       @touchmove="move"
     >
@@ -25,7 +23,6 @@
         >{{o}}</div>
       </div>
     </div>
-  </div>
 
 </template>
 
@@ -75,10 +72,10 @@ export default {
   methods: {
     changeDomStyle: function () {
       this.scrollDivOffsetTop = this.$refs.scrollDiv.offsetTop
-      this.winWidth = window.innerWidth;
-      this.winHeight = window.innerHeight;
-      this.$refs.scrollDiv.style.height = this.winHeight - this.scrollDivOffsetTop + 'px';
-      this.$refs.scrollDiv.style.maxHeight = this.winHeight - this.scrollDivOffsetTop + 'px';
+      // this.winWidth = window.innerWidth;
+      // this.winHeight = window.innerHeight;
+      // this.$refs.scrollDiv.style.height = this.winHeight - this.scrollDivOffsetTop + 'px';
+      // this.$refs.scrollDiv.style.maxHeight = this.winHeight - this.scrollDivOffsetTop + 'px';
     },
     move: function () {
       this.startScroll();
@@ -89,11 +86,11 @@ export default {
     TimeDelay: function () {
       if (this.timer) clearTimeout(this.timer);
       this.timer = setTimeout(() => {
-        // this.scrollY =
-        //   document.documentElement.scrollTop ||
-        //   window.pageYOffset ||
-        //   document.body.scrollTop;
-        this.scrollY = this.$refs.scrollDiv.scrollTop;
+        this.scrollY =
+          document.documentElement.scrollTop ||
+          window.pageYOffset ||
+          document.body.scrollTop;
+        // this.scrollY = this.$refs.scrollDiv.scrollTop;
         console.log(this.scrollY)
         if (this.scrollY === this.fromTop) {
           clearTimeout(this.timer);
@@ -104,7 +101,7 @@ export default {
         for (let item of this.baseDataArray) {
           if (this.scrollY > item.top - 120) {
             this.fixedItem = item.fixedItem;
-            document.getElementById(`${item.idName}`).style.top = this.scrollDivOffsetTop- 50 + 'px';
+            document.getElementById(`${item.idName}`).style.top = this.scrollDivOffsetTop - 50 + 'px';
           }
         }
 
@@ -129,16 +126,16 @@ export default {
       return arrayChunk;
     },
     startScroll: function () {
-      // this.scrollY =
-      //   document.documentElement.scrollTop ||
-      //   window.pageYOffset ||
-      //   document.body.scrollTop;
-      this.scrollY = this.$refs.scrollDiv.scrollTop;
+      this.scrollY =
+        document.documentElement.scrollTop ||
+        window.pageYOffset ||
+        document.body.scrollTop;
+      // this.scrollY = this.$refs.scrollDiv.scrollTop;
       console.log(this.scrollY)
       for (let item of this.baseDataArray) {
         if (this.scrollY > item.top - 120) {
           this.fixedItem = item.fixedItem;
-          document.getElementById(`${item.idName}`).style.top = this.scrollDivOffsetTop- 50 + 'px';
+          document.getElementById(`${item.idName}`).style.top = this.scrollDivOffsetTop - 50 + 'px';
         }
       }
     }
@@ -153,10 +150,7 @@ export default {
 
 <style scoped>
 .scroll-div {
-  overflow-y: scroll;
-  -webkit-overflow-scrolling: touch;
-  margin-top:150px;
-
+  margin-top: 150px;
 }
 .for-class {
   width: 100%;
